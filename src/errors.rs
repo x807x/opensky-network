@@ -12,4 +12,13 @@ pub enum Error {
 
     #[error("Unable to parse response as Json: {0}")]
     InvalidJson(#[from] serde_json::error::Error),
+
+    #[error("Unable to parse response as Json: {0}")]
+    InvalidCsv(#[from] csv::Error),
+
+    #[error("Unable to write file: {0}")]
+    IO(#[from] std::io::Error),
+
+    #[error("Unable to parse system time: {0}")]
+    SystemTimeError(#[from] std::time::SystemTimeError),
 }

@@ -50,12 +50,14 @@
 use std::sync::Arc;
 
 pub mod bounding_box;
+pub mod datasets;
 pub mod errors;
 pub mod flights;
 pub mod states;
 pub mod tracks;
 
 pub use bounding_box::BoundingBox;
+use datasets::clear_cache;
 pub use flights::Flight;
 use flights::FlightsRequestBuilder;
 use states::StateRequestBuilder;
@@ -125,5 +127,15 @@ impl OpenSkyApi {
     /// detailed track information.
     pub fn get_tracks(&self, icao24: String) -> TrackRequestBuilder {
         TrackRequestBuilder::new(self.login.clone(), icao24)
+    }
+
+    pub async fn clear_cache(&self) {
+        clear_cache().await
+    }
+
+    pub async fn get_aircraft_data(
+        &self,
+    ) -> Result<Vec<datasets::aircrafts::Aircraft>, errors::Error> {
+        datasets::aircrafts::get_aircraft_data(9, 2024).await
     }
 }
